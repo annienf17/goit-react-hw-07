@@ -1,0 +1,40 @@
+.formContainer {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 400px;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  background-color: #bbb;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  border: 1px solid #ccc;
+  width: 130px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.error {
+  color: rgb(255, 89, 0);
+  margin-top: 10px;
+}
