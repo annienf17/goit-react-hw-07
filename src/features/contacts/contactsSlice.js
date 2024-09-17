@@ -1,5 +1,9 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createSelector } from "reselect";
+// contactsSlice.js
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit";
 import api from "../../api";
 
 // Async thunk to fetch contacts
@@ -78,13 +82,17 @@ const contactsSlice = createSlice({
 
 // Selector to get the contacts state
 const selectContactsState = (state) => state.contacts;
+const selectFilterState = (state) => state.filters.status;
 
 // Memoized selector to filter contacts
 export const selectFilteredContacts = createSelector(
-  [selectContactsState],
-  (contactsState) => {
-    // Replace the condition with your filtering logic
-    return contactsState.items.filter((contact) => contact.isActive);
+  [selectContactsState, selectFilterState],
+  (contactsState, filter) => {
+    return filter
+      ? contactsState.items.filter((contact) =>
+          contact.name.toLowerCase().includes(filter.toLowerCase())
+        )
+      : contactsState.items;
   }
 );
 
