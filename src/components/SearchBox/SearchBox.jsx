@@ -4,7 +4,7 @@ import { setFilter } from "../../features/filters/filtersSlice";
 
 export default function SearchBox() {
   const dispatch = useDispatch();
-  const filter = useSelector((state) => state.filters.filter);
+  const filter = useSelector((state) => state.filters.status);
 
   const handleSearch = (value) => {
     dispatch(setFilter(value));
@@ -16,7 +16,7 @@ export default function SearchBox() {
         Find contacts by name
         <input
           type="text"
-          value={filter}
+          value={filter === "all" ? "" : filter}
           onChange={(e) => handleSearch(e.target.value)}
           className={css.input}
         />

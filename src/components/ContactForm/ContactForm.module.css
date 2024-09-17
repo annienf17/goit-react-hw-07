@@ -23,8 +23,7 @@
 
 .buttonContainer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
 }
 
 .button {
@@ -32,9 +31,4 @@
   width: 130px;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.error {
-  color: rgb(255, 89, 0);
-  margin-top: 10px;
 }

@@ -3,18 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const filtersSlice = createSlice({
   name: "filters",
   initialState: {
-    status: "all",
-    filter: "", // Dodane pole filter do stanu
+    status: "",
   },
   reducers: {
     setFilter: (state, action) => {
-      state.filter = action.payload; // Ustawienie wartości filtra
-    },
-    setStatus: (state, action) => {
-      state.status = action.payload; // Ustawienie statusu
+      state.status = action.payload;
     },
   },
 });
 
-export const { setFilter, setStatus } = filtersSlice.actions;
+export const { setFilter } = filtersSlice.actions;
 export default filtersSlice.reducer;

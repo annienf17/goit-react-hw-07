@@ -1,36 +1,44 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchContacts } from "../../features/contacts/contactsSlice";
+import {
+  fetchContacts,
+  deleteContact,
+} from "../../features/contacts/contactsSlice";
 import Contact from "../Contact/Contact";
-import css from "./ContactList.module.css";
 
-export default function ContactList() {
+const ContactList = () => {
   const dispatch = useDispatch();
   const contacts = useSelector((state) => state.contacts.items);
-  const status = useSelector((state) => state.contacts.status);
+  const loading = useSelector((state) => state.contacts.loading);
   const error = useSelector((state) => state.contacts.error);
+  const filter = useSelector((state) => state.filters.status);
 
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchContacts());
-    }
-  }, [status, dispatch]);
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  const handleDelete = (id) => {
+    dispatch(deleteContact(id));
+  };
 
-  if (status === "failed") {
-    return <div>Error: {error}</div>;
-  }
+  const filteredContacts = filter
+    ? contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(filter.toLowerCase())
+      )
+    : contacts;
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <ul className={css.contactList}>
-      {contacts.map((contact) => (
+    <ul>
+      {filteredContacts.map((contact) => (
         <li key={contact.id}>
-          <Contact data={contact} />
+          <Contact data={contact} onDelete={handleDelete} />
         </li>
       ))}
     </ul>
   );
-}
+};
+
+export default ContactList;

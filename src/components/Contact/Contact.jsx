@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 import { HiUser, HiPhone } from "react-icons/hi";
-import { useDispatch } from "react-redux";
-import { deleteContactAsync } from "../../features/contacts/contactsSlice";
 import css from "./Contact.module.css";
+import { useDispatch } from "react-redux";
+import { deleteContact } from "../../features/contacts/contactsSlice";
 
 export default function Contact({ data: { id, name, phone } }) {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteContactAsync(id));
+    dispatch(deleteContact(id));
   };
 
   return (
@@ -19,13 +19,13 @@ export default function Contact({ data: { id, name, phone } }) {
           {name}
         </li>
         <li className={css.listItem}>
-          <HiPhone className={css.icon} size="20" />
-          {phone}
-        </li>
-        <li className={css.listItem}>
-          <button onClick={handleDelete}>Delete</button>
+          <HiPhone className={css.icon} size="20" /> {phone}
         </li>
       </ul>
+
+      <button className={css.button} onClick={handleDelete}>
+        Delete
+      </button>
     </div>
   );
 }
