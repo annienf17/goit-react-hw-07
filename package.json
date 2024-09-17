@@ -12,6 +12,7 @@
   "dependencies": {
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.2.7",
+    "axios": "^1.7.7",
     "formik": "^2.4.6",
     "nanoid": "^5.0.7",
     "react": "^18.3.1",

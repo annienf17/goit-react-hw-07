@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import contactsData from "../../contacts.json";
 import { nanoid } from "nanoid";
 
@@ -18,18 +19,59 @@ const loadInitialContacts = () => {
   return initialContacts;
 };
 
+// Asynchroniczne generatory akcji
+export const fetchContacts = createAsyncThunk(
+  "contacts/fetchContacts",
+  async () => {
+    const response = await axios.get(
+      "https://66e2f551494df9a478e3c7ef.mockapi.io/Contacts"
+    );
+    return response.data;
+  }
+);
+
+export const addContactAsync = createAsyncThunk(
+  "contacts/addContactAsync",
+  async (newContact) => {
+    const response = await axios.post(
+      "https://66e2f551494df9a478e3c7ef.mockapi.io/Contacts",
+      newContact
+    );
+    return response.data;
+  }
+);
+
+export const deleteContactAsync = createAsyncThunk(
+  "contacts/deleteContactAsync",
+  async (contactId) => {
+    await axios.delete(
+      `https://66e2f551494df9a478e3c7ef.mockapi.io/Contacts/${contactId}`
+    );
+    return contactId;
+  }
+);
+
 // Funkcja pomocnicza do sprawdzania duplikatów
 const isDuplicate = (contacts, newContact) => {
+  const duplicateContact = contacts.find(
+    (contact) =>
+      contact.name.toLowerCase() === newContact.name.toLowerCase() &&
+      contact.number === newContact.number
+  );
+
+  if (duplicateContact) {
+    return "This name and number already exist.";
+  }
+
   const duplicateName = contacts.some(
     (contact) => contact.name.toLowerCase() === newContact.name.toLowerCase()
   );
+
   const duplicateNumber = contacts.some(
     (contact) => contact.number === newContact.number
   );
 
-  if (duplicateName && duplicateNumber) {
-    return "This name and number already exist.";
-  } else if (duplicateName) {
+  if (duplicateName) {
     return "This name already exists.";
   } else if (duplicateNumber) {
     return "This number already exists.";
@@ -41,7 +83,8 @@ const isDuplicate = (contacts, newContact) => {
 const contactsSlice = createSlice({
   name: "contacts",
   initialState: {
-    items: loadInitialContacts(),
+    items: [],
+    status: "idle",
     error: null,
   },
   reducers: {
@@ -58,13 +101,32 @@ const contactsSlice = createSlice({
       state.items = state.items.filter(
         (contact) => contact.id !== action.payload
       );
-      if (state.items.length === 0) {
-        state.items = loadInitialContacts(); // Załaduj initialContacts, jeśli lista jest pusta
-      }
     },
     clearErrors: (state) => {
       state.error = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContacts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+      })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(addContactAsync.fulfilled, (state, action) => {
+        state.items.push(action.payload);
+      })
+      .addCase(deleteContactAsync.fulfilled, (state, action) => {
+        state.items = state.items.filter(
+          (contact) => contact.id !== action.payload
+        );
+      });
   },
 });
 

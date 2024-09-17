@@ -1,40 +1,34 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContacts } from "../../features/contacts/contactsSlice";
 import Contact from "../Contact/Contact";
 import css from "./ContactList.module.css";
 
 export default function ContactList() {
-  const [contacts, setContacts] = useState([]);
+  const dispatch = useDispatch();
+  const contacts = useSelector((state) => state.contacts.items);
+  const status = useSelector((state) => state.contacts.status);
+  const error = useSelector((state) => state.contacts.error);
 
   useEffect(() => {
-    // Fetch contacts from backend
-    fetch("https://66e2f551494df9a478e3c7ef.mockapi.io/Contacts")
-      .then((response) => response.json())
-      .then((data) => setContacts(data))
-      .catch((error) => console.error("Error fetching contacts:", error));
-  }, []);
+    if (status === "idle") {
+      dispatch(fetchContacts());
+    }
+  }, [status, dispatch]);
 
-  const handleDelete = (id) => {
-    // Delete contact from backend
-    fetch(`https://66e2f551494df9a478e3c7ef.mockapi.io/Contacts/${id}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (response.ok) {
-          setContacts((prevContacts) =>
-            prevContacts.filter((contact) => contact.id !== id)
-          );
-        } else {
-          console.error("Error deleting contact:", response.statusText);
-        }
-      })
-      .catch((error) => console.error("Error deleting contact:", error));
-  };
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (status === "failed") {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <ul className={css.contactList}>
       {contacts.map((contact) => (
         <li key={contact.id}>
-          <Contact data={contact} onDelete={handleDelete} />
+          <Contact data={contact} />
         </li>
       ))}
     </ul>
