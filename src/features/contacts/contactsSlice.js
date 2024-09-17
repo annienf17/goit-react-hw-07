@@ -14,7 +14,18 @@ export const fetchContacts = createAsyncThunk(
 // Async thunk to add a contact
 export const addContact = createAsyncThunk(
   "contacts/addContact",
-  async (contact) => {
+  async (contact, { getState, rejectWithValue }) => {
+    const { contacts } = getState();
+    const duplicate = contacts.items.find(
+      (item) => item.name === contact.name || item.phone === contact.phone
+    );
+
+    if (duplicate) {
+      return rejectWithValue(
+        "Contact with the same name or phone number already exists."
+      );
+    }
+
     const response = await api.post("/", contact);
     return response.data;
   }
@@ -53,6 +64,9 @@ const contactsSlice = createSlice({
       })
       .addCase(addContact.fulfilled, (state, action) => {
         state.items.push(action.payload);
+      })
+      .addCase(addContact.rejected, (state, action) => {
+        state.error = action.payload;
       })
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.items = state.items.filter(
