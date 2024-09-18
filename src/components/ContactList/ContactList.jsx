@@ -1,4 +1,3 @@
-// src/components/ContactList/ContactList.js
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -27,6 +26,12 @@ const ContactList = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (!loading && contacts.length === 0) {
+      toast.info("No contacts available.");
+    }
+  }, [loading, contacts]);
+
   const handleDelete = (id) => {
     dispatch(deleteContact(id))
       .unwrap()
@@ -34,8 +39,7 @@ const ContactList = () => {
       .catch((err) => toast.error(`Error: ${err.message}`));
   };
 
-  if (loading)
-    return <ClipLoader color="#16ea4b" loading={loading} size={50} />; // Use the spinner
+  if (loading) return <ClipLoader color="#000" loading={loading} size={50} />; // Use the spinner
 
   return (
     <>
