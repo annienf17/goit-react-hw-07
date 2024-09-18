@@ -8,7 +8,7 @@
     "build": "vite build && npm run sentry:sourcemaps",
     "lint": "eslint .",
     "preview": "vite preview",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org 21wd --project contact-app vite build && sentry-cli sourcemaps upload --org 21wd --project contact-app vite build"
+    "sentry:sourcemaps": "sentry-cli releases files $VERCEL_GIT_COMMIT_SHA upload-sourcemaps ./dist --url-prefix '~/static/js' --rewrite --org 21wd --project contact-app"
   },
   "dependencies": {
     "@redux-devtools/extension": "^3.3.0",
