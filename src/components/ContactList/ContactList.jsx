@@ -1,4 +1,4 @@
-// ContactList.js
+// src/components/ContactList/ContactList.js
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,6 +9,7 @@ import {
 import Contact from "../Contact/Contact";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ClipLoader from "react-spinners/ClipLoader"; // Import the spinner
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,8 @@ const ContactList = () => {
       .catch((err) => toast.error(`Error: ${err.message}`));
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return <ClipLoader color="#16ea4b" loading={loading} size={50} />; // Use the spinner
 
   return (
     <>
