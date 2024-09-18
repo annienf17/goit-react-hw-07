@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -6,21 +5,6 @@ import { Provider } from "react-redux";
 import App from "./components/App/App";
 import { store } from "./redux/store";
 import "./index.css";
-
-Sentry.init({
-  dsn: "https://2001da90a2b0929394a1de6781a65220@o4507973738496000.ingest.us.sentry.io/4507974297321472",
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
-  ],
-  // Tracing
-  tracesSampleRate: 1.0, //  Capture 100% of the transactions
-  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
-  // Session Replay
-  replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-  replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-});
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -8,7 +8,7 @@ import {
 import Contact from "../Contact/Contact";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ClipLoader from "react-spinners/ClipLoader";
+import ClipLoader from "react-spinners/ClipLoader"; // Import the spinner
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const ContactList = () => {
   };
 
   if (loading)
-    return <ClipLoader color="#18f109" loading={loading} size={50} />;
+    return <ClipLoader color="#19f50a" loading={loading} size={50} />; // Use the spinner
 
   return (
     <>

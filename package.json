@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run sentry:sourcemaps",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "sentry:sourcemaps": "sentry-cli releases files $VERCEL_GIT_COMMIT_SHA upload-sourcemaps ./dist --url-prefix '~/static/js' --rewrite --org 21wd --project contact-app"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.2.7",
+    "@sentry/cli": "^2.36.1",
     "@sentry/react": "^8.30.0",
     "@sentry/tracing": "^7.114.0",
     "axios": "^1.7.7",
@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
-    "@sentry/cli": "^2.36.1",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
