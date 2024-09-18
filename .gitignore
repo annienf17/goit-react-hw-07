@@ -26,3 +26,6 @@ dist-ssr
 #opis.text
 .opis.txt 
 opis.txt
+
+# Sentry Config File
+.sentryclirc
