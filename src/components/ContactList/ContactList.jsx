@@ -7,6 +7,8 @@ import {
   selectFilteredContacts,
 } from "../../features/contacts/contactsSlice";
 import Contact from "../Contact/Contact";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -18,21 +20,32 @@ const ContactList = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(`Error: ${error}`);
+    }
+  }, [error]);
+
   const handleDelete = (id) => {
-    dispatch(deleteContact(id));
+    dispatch(deleteContact(id))
+      .unwrap()
+      .then(() => toast.success("Contact deleted successfully"))
+      .catch((err) => toast.error(`Error: ${err.message}`));
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   return (
-    <ul>
-      {contacts.map((contact) => (
-        <li key={contact.id}>
-          <Contact data={contact} onDelete={handleDelete} />
-        </li>
-      ))}
-    </ul>
+    <>
+      <ToastContainer />
+      <ul>
+        {contacts.map((contact) => (
+          <li key={contact.id}>
+            <Contact data={contact} onDelete={handleDelete} />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 };
 
